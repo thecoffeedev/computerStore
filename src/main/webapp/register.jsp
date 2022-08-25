@@ -12,6 +12,9 @@
             <div class="row mt-5 m-2">
                 <div class="col-md-4 offset-md-4">
                     <div class="card" style="border-radius: 8px;background: #F3E5F5;">
+                        
+                        <%@include file="components/message.jsp" %>
+                        
                         <div class="card-body px-5">
                             <div class="text-center">
                                 <img src="img/add-user.png" alt="sign up user" class="mx-auto my-1" width="48px" />
@@ -40,8 +43,8 @@
                                     <label for="address">User Address</label>
                                     <textarea name="user_address" class="form-control" placeholder="Enter your address here" style="height: 200px;"></textarea>
                                 </div>
-                                <button class="btn btn-outline-primary">Register</button>
-                                <button class="btn btn-outline-danger">Reset</button>
+                                <button type="submit" class="btn btn-outline-primary">Register</button>
+                                <button type="reset" class="btn btn-outline-danger">Reset</button>
                             </form>
                         </div>
                     </div>

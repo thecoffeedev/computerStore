@@ -1,5 +1,6 @@
 package com.mycompany.computerstore.servlets;
 
+import com.mycompany.computerstore.dao.UserDao;
 import com.mycompany.computerstore.entities.User;
 import com.mycompany.computerstore.helper.FactoryProvider;
 import java.io.IOException;
@@ -9,55 +10,49 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
-public class RegisterServlet extends HttpServlet {
-
+/**
+ *
+ * @author Anandha Narayanan Balu
+ */
+public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+           
+            
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-            try {
-                String userName = request.getParameter("user_name");
-                String userEmail = request.getParameter("user_email");
-                String userPassword = request.getParameter("user_password");
-                String userPhone = request.getParameter("user_phone");
-                String userAddress = request.getParameter("user_address");
+            // Validations & authenticating user
+            UserDao userDao = new UserDao(FactoryProvider.getFactory());
+            User user = userDao.getUserByEmailAndPassword(email, password);
 
-                if (userName.isEmpty()) {
-                    HttpSession httpSession = request.getSession();
-                    httpSession.setAttribute("message", "Error::: Name is Blank!");
-                    response.sendRedirect("register.jsp");
-                    return;
+            //System.out.println(user);
+            HttpSession httpSession = request.getSession();
+            if (user == null) {
+                httpSession.setAttribute("message", "Invalid Details !! Try with another one");
+                response.sendRedirect("login.jsp");
+                return;
+            } else {
+                out.println("<h1>Welcome " + user.getUserName() + " </h1>");
+
+                //login
+                httpSession.setAttribute("current-user", user);
+
+                if (user.getUserType().equals("admin")) {
+                    //admin:-admin.jsp
+                    response.sendRedirect("admin.jsp");
+                } else if (user.getUserType().equals("normal")) {
+                    //normal :normal.jsp
+                    response.sendRedirect("normal.jsp");
+                }else
+                {
+                    out.println("We have not identified user type");
                 }
-
-                // Creating User object to store the user data from registration page
-                User user = new User(userName, userEmail, userPassword, userPhone, "default.jpg", userAddress, "normal"
-                );
-
-                Session hibernateSession = FactoryProvider.getFactory().openSession();
-                Transaction transx = hibernateSession.beginTransaction();
-
-                int userId = (int) hibernateSession.save(user);
-
-                transx.commit();
-                hibernateSession.close();
-
-                HttpSession httpSession = request.getSession();
-                httpSession.setAttribute("message", "Registration Successful..! User Id: " + userId);
-
-                response.sendRedirect("register.jsp");
-
-            } catch (Exception e) {
-//                e.printStackTrace();
-                HttpSession httpSession = request.getSession();
-                httpSession.setAttribute("message", "Error::: " + e.getMessage());
-                response.sendRedirect("register.jsp");
+            
             }
-
         }
     }
 

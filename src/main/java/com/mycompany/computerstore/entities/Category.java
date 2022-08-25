@@ -23,6 +23,9 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
 
+    public Category() {
+    }
+    
     public Category(int categoryId, String categoryTitle, String categoryDescription) {
         this.categoryId = categoryId;
         this.categoryTitle = categoryTitle;
