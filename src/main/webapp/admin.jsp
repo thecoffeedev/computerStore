@@ -1,3 +1,5 @@
+<%@page import="java.util.Map"%>
+<%@page import="com.mycompany.computerstore.helper.Helper"%>
 <%@page import="com.mycompany.computerstore.entities.Category"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycompany.computerstore.helper.FactoryProvider"%>
@@ -27,7 +29,16 @@
 
 %>
 
+<!<!-- Add Category -->
 
+<%  
+    CategoryDao cdao = new CategoryDao(FactoryProvider.getFactory());
+    List<Category> list = cdao.getCategories();
+
+    // Getting user and product count
+    Map<String,Long> m = Helper.getCounts(FactoryProvider.getFactory());
+
+%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -65,7 +76,7 @@
                                 <img style="max-width: 125px;" class="img-fluid rounded-circle" src="img/seo-and-web.png" alt="user_icon">
 
                             </div> 
-                            <h1>2342</h1>
+                            <h1><%= m.get("userCount") %></h1>
                             <h1 class="text-uppercase text-muted">Users</h1>
 
                         </div>
@@ -90,7 +101,7 @@
 
                             </div> 
 
-                            <h1>23432</h1>
+                            <h1><%= list.size() %></h1>
                             <h1 class="text-uppercase text-muted">Categories</h1>
 
                         </div>
@@ -114,7 +125,7 @@
 
                             </div> 
 
-                            <h1>234</h1>
+                            <h1><%= m.get("productCount") %></h1>
                             <h1 class="text-uppercase text-muted">Products</h1>
 
                         </div>
@@ -296,14 +307,6 @@
                             <div class="form-group">
                                 <input type="number" class="form-control" placeholder="Enter product Quantity" name="pQuantity" required />
                             </div>
-
-
-                            <!--product category-->
-
-                            <%  CategoryDao cdao = new CategoryDao(FactoryProvider.getFactory());
-                                List<Category> list = cdao.getCategories();
-
-                            %>
 
 
                             <div class="form-group">

@@ -10,7 +10,7 @@
         <%@include file="components/navbar.jsp" %>
         <div class="container-fluid">
             <div class="row mt-5 m-2">
-                <div class="col-md-4 offset-md-4">
+                <div class="col-md-6 offset-md-3">
                     <div class="card" style="border-radius: 8px;background: #F3E5F5;">
                         
                         <%@include file="components/message.jsp" %>
